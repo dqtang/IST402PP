@@ -5,3 +5,7 @@ browser.get('http://localhost:8000')
 
 assert 'Class Requirement List' in browser.title
 
+
+
+browser.quit()
+
