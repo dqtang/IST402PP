@@ -1,16 +1,24 @@
 from selenium import webdriver
+import unittest
+
+class FIrstTestCase(unittest.TestCase):
+
+    def startUp(self):
+        self.browser = webdriver.Firefox()
 
 
-browser = webdriver.Firefox()
-#Danny wants a list to manage the courses he requires for his major.
-#He goes to this website that he heard from his senior to help manage his course.
-browser.get('http://localhost:8000')
 
-#Danny saw the title of the website and knows he is on the right site.
-assert 'Course Management List' in browser.title
+def FirstList(self):
+    #Danny wants a list e manage the courses he requires for his major.
+    #He goes to this website that he heard from his senior to help manage his course.
+    self.browser.get(self.live_server_url)
+    #Danny saw the title of the website and knows he is on the right site.
+    self.assertIn ('Course Management List', self.browser.title)
 
 
 #1) He saw a textbox for him to enter his course.
+
+
 
 #2) He press the enter key and saw the list updated. Adding his course to the list
 
@@ -22,7 +30,7 @@ assert 'Course Management List' in browser.title
 
 #6) Excited he wonders if the list will save and be used later on.
 
-
-#Close Browser.
-browser.quit()
+def CloseBrowser(self):
+    #Close Browser.
+    self.browser.quit()
 
