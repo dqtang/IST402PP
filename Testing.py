@@ -7,12 +7,19 @@ class FIrstTestCase(unittest.TestCase):
     def startUp(self):
         self.browser = webdriver.Firefox()
 
-    def FirstList(self):
-    #Danny wants a list where he can manage the courses he requires for his major.
+def CloseBrowser(self):
+    #Close Browser.
+    self.browser.quit()
+
+
+
+def FirstList(self):
+    #Danny wants a list e manage the courses he requires for his major.
     #He goes to this website that he heard from his senior to help manage his course.
     self.browser.get('http://localhost:8000')
     #Danny saw the title of the website and knows he is on the right site.
     self.assertIn ('Course Management List', self.browser.title)
+    self.fail('Testing Version Fail')  
 
 #1) He saw a textbox for him to enter his course.
     inputbox = self.browser.find_element_by_id('id_new_item')  
@@ -35,7 +42,5 @@ self.fail('Finish the test!')
 
 #6) Excited he wonders if the list will save and be used later on.
 
-    def CloseBrowser(self):
-    #Close Browser.
-        self.browser.quit()
-
+if __name__ == '__main__':  
+    unittest.main(warnings='ignore') 
