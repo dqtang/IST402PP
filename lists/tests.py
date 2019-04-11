@@ -17,8 +17,31 @@ class HomePageTest(TestCase):
 
     def test_save_POST_request(self):
         response = self.client.post('/', data = {'course_text': 'A new Course'})
-        self.assertIn('A new Course', response.content.decode())
-        self.assertTemplateUsed(response, 'home.html')
+
+        self.assertEqual(Courses.objects.count(), 1)
+        new_course = Courses.objects.first()
+        self.assertEqual(new_course.text, 'A new Course')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
+
+    def test_save_courses_when_necessary(self):
+        self.client.get('/')
+        self.assertEqual(Courses.objects.count(), 0)
+
+    def test_redirecct_after_POST(self):
+        response = self.client.post('/', data={'course_text': 'A new Course'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
+
+    def test_display_all_courses(self):
+        Courses.objects.create(text = 'Course1')
+        Courses.objects.create(text = 'Course2')
+
+        response = self.client.get('/')
+
+        self.assertIn('Course1',  response.content.decode())
+        self.assertIn('Course2',  response.content.decode())
 
 
 class CourseModelTest(TestCase):

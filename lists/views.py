@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from lists.models import Courses
 
 
 # Create your views here.
 def home_page(request):
-    return render(request, 'home.html', {
-        'new_course_text' : request.POST.get('course_text', ''),
-    })
+    if request.method == 'POST':
+        Courses.objects.create(text=request.POST['course_text'])
+        return redirect('/')
+
+    courses = Courses.objects.all()
+    return render(request, 'home.html', {'courses' : courses})
