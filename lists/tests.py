@@ -12,3 +12,9 @@ class HomePageTest(TestCase):
             
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
+
+    def test_save_POST_request(self):
+        response = self.client.post('/', data = {'course_text': 'A new Course'})
+        self.assertIn('A new Course', response.content.decode())
+        self.assertTemplateUsed(response, 'home.html')
