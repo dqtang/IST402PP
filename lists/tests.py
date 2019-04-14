@@ -15,24 +15,18 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'home.html')
 
 
+class NewListTest(TestCase):
     def test_save_POST_request(self):
-        response = self.client.post('/', data = {'course_text': 'A new Course'})
-
+        self.client.post('/lists/new', data = {'course_text': 'A new Course'})
         self.assertEqual(Courses.objects.count(), 1)
         new_course = Courses.objects.first()
         self.assertEqual(new_course.text, 'A new Course')
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/best-course-list/')
-
-    def test_save_courses_when_necessary(self):
-        self.client.get('/')
-        self.assertEqual(Courses.objects.count(), 0)
+  
 
     def test_redirecct_after_POST(self):
-        response = self.client.post('/', data={'course_text': 'A new Course'})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/best-course-list/')
+        response = self.client.post('/lists/new', data={'course_text': 'A new Course'})
+        self.assertRedirects(response, '/lists/best-course-list/')
 
 
 class CourseModelTest(TestCase):
