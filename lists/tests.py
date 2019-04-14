@@ -86,3 +86,28 @@ class ListViewTest(TestCase):
 
 
 
+class NewCourseTest(TestCase):
+    def test_can_save_a_request_to_existing_list(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+
+        self.client.post(
+            f'/lists/{correct_list.id}/add_course',
+            data={'course_text' : 'A new course for an existing list'}
+        )
+
+        self.assertEqual(Courses.objects.count(), 1)
+        new_course = Courses.objects.first()
+        self.assertEqual(new_course.text, 'A new course for an existing list')
+        self.assertEqual(new_course.list, correct_list)
+
+    def test_redirect_to_list_view(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+
+        response = self.client.post(
+            f'/lists/{correct_list.id}/add_course',
+            data={'course_text' : 'A new course for an existing list'}            
+        )
+
+        self.assertRedirects(response, f'/lists/{correct_list.id}/')
