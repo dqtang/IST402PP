@@ -3,17 +3,11 @@
         <title>Course Management</title>
     </head>
     <body>
-        <h1>Your Course List</h1>
-        <form method = "POST">
+        <h1>Start A Course List</h1>
+        <form method = "POST"> 
             <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
             {% csrf_token %}
-
         </form>
-
-        <table id="Course_Table">
-            {% for course in courses %}
-                <tr><td>{{ forloop.counter }}: {{ course.text }}</td></tr>
-            {% endfor %}
         </table>
     </body>
 </html>

@@ -23,7 +23,7 @@ class HomePageTest(TestCase):
         self.assertEqual(new_course.text, 'A new Course')
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/best-course-list/')
 
     def test_save_courses_when_necessary(self):
         self.client.get('/')
@@ -32,16 +32,7 @@ class HomePageTest(TestCase):
     def test_redirecct_after_POST(self):
         response = self.client.post('/', data={'course_text': 'A new Course'})
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
-
-    def test_display_all_courses(self):
-        Courses.objects.create(text = 'Course1')
-        Courses.objects.create(text = 'Course2')
-
-        response = self.client.get('/')
-
-        self.assertIn('Course1',  response.content.decode())
-        self.assertIn('Course2',  response.content.decode())
+        self.assertEqual(response['location'], '/lists/best-course-list/')
 
 
 class CourseModelTest(TestCase):
@@ -61,3 +52,19 @@ class CourseModelTest(TestCase):
         second_saved_course = saved_Courses[1]
         self.assertEqual(first_saved_course.text, 'First Course')
         self.assertEqual(second_saved_course.text, 'Second Course')
+
+
+class ListViewTest(TestCase):
+    
+    def test_use_list_template(self):
+        response = self.client.get('/lists/best-course-list/')
+        self.assertTemplateUsed(response, 'list.html')
+
+    def test_display_all_courses(self):
+        Courses.objects.create(text = 'Course1')
+        Courses.objects.create(text = 'Course2')
+
+        response = self.client.get('/lists/best-course-list/')
+
+        self.assertContains(response, 'Course1')
+        self.assertContains(response, 'Course2')

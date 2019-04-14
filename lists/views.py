@@ -7,7 +7,9 @@ from lists.models import Courses
 def home_page(request):
     if request.method == 'POST':
         Courses.objects.create(text=request.POST['course_text'])
-        return redirect('/')
+        return redirect('/lists/best-course-list/')
+    return render(request, 'home.html')
 
+def view_list(request):
     courses = Courses.objects.all()
-    return render(request, 'home.html', {'courses' : courses})
+    return render(request, 'list.html', {'courses' : courses})

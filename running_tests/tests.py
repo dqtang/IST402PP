@@ -37,7 +37,7 @@ class FIrstTestCase(LiveServerTestCase):
         #Danny saw the title of the website and knows he is on the right site.
         self.assertIn ('Course Management', self.browser.title)
         header_text =  self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Your Course List', header_text)
+        self.assertIn('Course List', header_text)
 
 
     #1) He saw a textbox for him to enter his course.
