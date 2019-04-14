@@ -90,6 +90,39 @@ class FIrstTestCase(LiveServerTestCase):
 
     #6) Excited he wonders if the list will save and be used later on.
 
+    def test_multi_user_list_diff_urls(self):
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element_by_id('Course_Id')
+        inputbox.send_keys('History 101')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_table('1: History 101')
+    #7) Danny notices the Unqiue URL
+        danny_list_url = self.browser.current_url
+        self.assertRegex(danny_list_url, '/lists/.+')
+
+    
+    #8) His friend Josh decided to give the site a try
+    ##New browser session to avoid having another user info display
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+    #9)Josh vists homepage
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('History 101', page_text)
+
+        inputbox = self.browser.find_element_by_id('Course_Id')
+        inputbox.send_keys('Art 101')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_table('1: Art 101')
+    #10) Josh noticed his own unique url tooss
+        josh_list_url = self.browser.current_url
+        self.assertRegex(josh_list_url, '/lists/.+')
+        self.assertNotEqual(danny_list_url, josh_list_url)
+
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('History 101', page_text)
+        self.assertIn('Art 101', page_text)
 
 
 
