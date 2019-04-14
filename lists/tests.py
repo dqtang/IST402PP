@@ -24,7 +24,7 @@ class NewListTest(TestCase):
 
   
 
-    def test_redirecct_after_POST(self):
+    def test_redirects_after_POST(self):
         response = self.client.post('/lists/new', data={'course_text': 'A new Course'})
         self.assertRedirects(response, '/lists/best-course-list/')
 
