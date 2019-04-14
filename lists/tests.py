@@ -26,7 +26,8 @@ class NewListTest(TestCase):
 
     def test_redirecct_after_POST(self):
         response = self.client.post('/lists/new', data={'course_text': 'A new Course'})
-        self.assertRedirects(response, '/lists/best-course-list/')
+        new_list = List.objects.first()
+        self.assertRedirects(response, f'/lists/{new_list.id}/')
 
 
 class ListAndCourseModelTest(TestCase):
@@ -62,16 +63,26 @@ class ListAndCourseModelTest(TestCase):
 class ListViewTest(TestCase):
     
     def test_use_list_template(self):
-        other_list
-        response = self.client.get('/lists/best-course-list/')
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
-    def test_display_all_courses(self):
-        list_ = List.objects.create()
-        Courses.objects.create(text = 'Course1', list=list_)
-        Courses.objects.create(text = 'Course2', list=list_)
+    def test_display_only_courses_related_to_list(self):
+        correct_list = List.objects.create()
+        Courses.objects.create(text = 'Course1', list=correct_list)
+        Courses.objects.create(text = 'Course2', list=correct_list)
+        other_list = List.objects.create()
+        Courses.objects.create(text='Another Course1', list=other_list)
+        Courses.objects.create(text='Another Course2', list=other_list)
 
-        response = self.client.get('/lists/best-course-list/')
+
+        response = self.client.get(f'/lists/{correct_list.id}/')
 
         self.assertContains(response, 'Course1')
         self.assertContains(response, 'Course2')
+
+        self.assertNotContains(response, 'Another Course1')
+        self.assertNotContains(response, 'Another Course1')
+
+
+
