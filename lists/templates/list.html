@@ -4,7 +4,7 @@
     </head>
     <body>
         <h1>Your Course List</h1>
-        <form method = "POST" action="/lists/new"> 
+        <form method = "POST" action="/lists/{{ list.id }}/add_course"> 
             <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
             {% csrf_token %}
         </form>

@@ -84,6 +84,11 @@ class ListViewTest(TestCase):
         self.assertNotContains(response, 'Another Course1')
         self.assertNotContains(response, 'Another Course1')
 
+    def test_passes_correct_list_template(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+        response = self.client.get(f'/lists/{correct_list.id}/')
+
 
 
 class NewCourseTest(TestCase):
