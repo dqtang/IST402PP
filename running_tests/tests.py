@@ -1,10 +1,13 @@
 from selenium import webdriver
-import unittest
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 import time
+from django.test import LiveServerTestCase
 
+Max_WAIT = 10
 
-class FIrstTestCase(unittest.TestCase):
+class FIrstTestCase(LiveServerTestCase):
+
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -13,15 +16,24 @@ class FIrstTestCase(unittest.TestCase):
         #Close Browser.
         self.browser.quit()
 
-    def check_for_row_in_table(self, row_text):
-        table = self.browser.find_element_by_id('Course_Table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
+    def wait_for_row_table(self, row_text):
+        start_time = time.time()
+        while True:
+            try:
+                table = self.browser.find_element_by_id('Course_Table')
+                rows = table.find_elements_by_tag_name('tr')
+                self.assertIn(row_text, [row.text for row in rows])
+                return
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > Max_WAIT:
+                    raise e
+                time.sleep(0.5)
+
 
     def test_FirstList(self):
         #Danny wants a list e manage the courses he requires for his major.
         #He goes to this website that he heard from his senior to help manage his course.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         #Danny saw the title of the website and knows he is on the right site.
         self.assertIn ('Course Management', self.browser.title)
         header_text =  self.browser.find_element_by_tag_name('h1').text
@@ -39,7 +51,7 @@ class FIrstTestCase(unittest.TestCase):
         inputbox.send_keys('History 101')
 
         #Testing phase allow time to enter info
-        time.sleep(5)
+        time.sleep(3)
 
         """
         Gets text from input box used for formating currently useless
@@ -47,7 +59,7 @@ class FIrstTestCase(unittest.TestCase):
         """
         inputbox.send_keys(Keys.ENTER)
         
-        time.sleep(5)
+        time.sleep(3)
 
         """
         Sprint 2: Make it not Hardcoded 
@@ -56,15 +68,15 @@ class FIrstTestCase(unittest.TestCase):
         """
                         
         # Will add Loop and Counter Later to enumerate itself
-        self.check_for_row_in_table('1: History 101')
+        self.wait_for_row_table('1: History 101')
         
         inputbox = self.browser.find_element_by_id('Course_Id')
         inputbox.send_keys('English 101')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(2)
 
-        self.check_for_row_in_table('1: History 101')
-        self.check_for_row_in_table('2: English 101')
+        self.wait_for_row_table('1: History 101')
+        self.wait_for_row_table('2: English 101')
 
 
 
@@ -82,6 +94,3 @@ class FIrstTestCase(unittest.TestCase):
 
 
         self.fail('Testing Version Intentional Fail')  
-
-if __name__ == '__main__':  
-    unittest.main(warnings='ignore') 
