@@ -9,7 +9,7 @@
             {% csrf_token %}
         </form>
         <table id="Course_Table">
-            {% for course in courses %}
+            {% for course in list.courses_set.all %}
                 <tr><td>{{ forloop.counter }}: {{ course.text }}</td></tr>
             {% endfor %}
         </table>

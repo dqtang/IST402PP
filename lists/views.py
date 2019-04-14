@@ -9,8 +9,7 @@ def home_page(request):
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
-    courses = Courses.objects.filter(list=list_)
-    return render(request, 'list.html', {'courses' : courses})
+    return render(request, 'list.html', {'list' : list_})
 
 def new_list(request):
     list_ = List.objects.create()
