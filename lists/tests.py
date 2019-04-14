@@ -3,7 +3,7 @@ from django.urls import resolve
 from lists.views import home_page
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from lists.models import Courses
+from lists.models import Courses, List
 
 
 # Create your tests here.
@@ -29,15 +29,24 @@ class NewListTest(TestCase):
         self.assertRedirects(response, '/lists/best-course-list/')
 
 
-class CourseModelTest(TestCase):
+class ListAndCourseModelTest(TestCase):
     def test_save_and_retrieve_courses(self):
+        list_ = List()
+        list_.save()
+
+
         first_course = Courses()
         first_course.text = 'First Course'
+        first_course.list = list_
         first_course.save()
 
         second_course = Courses()
         second_course.text = 'Second Course'
+        second_course.list = list_
         second_course.save()
+
+        saved_list = List.objects.first()
+        self.assertEqual(saved_list, list_)
 
         saved_Courses = Courses.objects.all()
         self.assertEqual(saved_Courses.count(), 2)
@@ -45,7 +54,9 @@ class CourseModelTest(TestCase):
         first_saved_course = saved_Courses[0]
         second_saved_course = saved_Courses[1]
         self.assertEqual(first_saved_course.text, 'First Course')
+        self.assertEqual(first_saved_course.list, list_)
         self.assertEqual(second_saved_course.text, 'Second Course')
+        self.assertEqual(second_saved_course.list, list_)
 
 
 class ListViewTest(TestCase):
@@ -55,8 +66,9 @@ class ListViewTest(TestCase):
         self.assertTemplateUsed(response, 'list.html')
 
     def test_display_all_courses(self):
-        Courses.objects.create(text = 'Course1')
-        Courses.objects.create(text = 'Course2')
+        list_ = List.objects.create()
+        Courses.objects.create(text = 'Course1', list=list_)
+        Courses.objects.create(text = 'Course2', list=list_)
 
         response = self.client.get('/lists/best-course-list/')
 
