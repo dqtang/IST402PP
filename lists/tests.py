@@ -26,7 +26,8 @@ class NewListTest(TestCase):
 
     def test_redirecct_after_POST(self):
         response = self.client.post('/lists/new', data={'course_text': 'A new Course'})
-        self.assertRedirects(response, '/lists/best-course-list/')
+        new_list = List.objects.first()
+        self.assertRedirects(response, f'/lists/{new_list.id}/')
 
 
 class ListAndCourseModelTest(TestCase):
@@ -62,15 +63,49 @@ class ListAndCourseModelTest(TestCase):
 class ListViewTest(TestCase):
     
     def test_use_list_template(self):
-        response = self.client.get('/lists/best-course-list/')
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
-    def test_display_all_courses(self):
-        list_ = List.objects.create()
-        Courses.objects.create(text = 'Course1', list=list_)
-        Courses.objects.create(text = 'Course2', list=list_)
+    def test_display_only_courses_for_list(self):
+        correct_list = List.objects.create()
+        Courses.objects.create(text = 'Course1', list=correct_list)
+        Courses.objects.create(text = 'Course2', list=correct_list)
 
-        response = self.client.get('/lists/best-course-list/')
+        other_list = List.objects.create()
+
+        Courses.objects.create(text = 'Another Course 1', list=other_list)
+        Courses.objects.create(text = 'Another Course 2', list=other_list)        
+
+        response = self.client.get(f'/lists/{correct_list.id}/')
 
         self.assertContains(response, 'Course1')
         self.assertContains(response, 'Course2')
+        self.assertNotContains(response, 'Another Corse 1')
+        self.assertNotContains(response, 'Another Corse 2')
+
+class NewCoursTest(TestCase):
+
+    def test_can_save_to_existing_list(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+
+        self.client.post(
+            f'/lists/{correct_list.id}/add_course',
+            data={'course_text': 'A course for existing list'}
+        )
+
+        self.assertEqual(Courses.objects.count(), 1)
+        new_course = Courses.objects.first()
+        self.assertEqual(new_course.text, 'A course for existing list')
+        self.assertEqual(new_course.list, correct_list)
+
+    def test_redirects_to_list_view(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+
+        response = self.client.post(            
+            f'/lists/{correct_list.id}/add_course',
+            data={'course_text': 'A course for existing list'}
+        )
+        self.assertRedirects(response, f'/lists/{correct_list.id}/')
