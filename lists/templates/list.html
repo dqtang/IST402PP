@@ -2,10 +2,16 @@
     <head>
         <title>Course Management</title>
     </head>
+    <style>
+        body {
+        background-color: #6699ff
+    }
+    </style>
     <body>
         <h1>Your Course List</h1>
         <form method = "POST" action="/lists/{{ list.id }}/add_course"> 
             <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
+            <button type="button">Submit</button>
             {% csrf_token %}
         </form>
         <table id="Course_Table">

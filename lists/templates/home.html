@@ -2,11 +2,22 @@
     <head>
         <title>Course Management</title>
     </head>
+        
+    <style>
+            body {
+            background-color: #6699ff
+        }
+        </style>
     <body>
-        <h1>Start A Course List</h1>
+        <h1 style="font-size:50px;">Start A Course List</h1>
         <form method = "POST" action="/lists/new"> 
             <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
-            {% csrf_token %}
+            <button type="button">Submit</button>
+            {% csrf_token %}  
+
+        <input type="checkbox">
+
+
         </form>
         </table>
     </body>
