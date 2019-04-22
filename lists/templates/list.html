@@ -18,13 +18,20 @@
         </form>
         <table id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
             {% for course in list.courses_set.all %}
-                <tr><td style="color:crimson">{{ forloop.counter }}: {{ course.text }} 
-                    <input id = "Completed" type ="checkbox" style="color:darkgreen" onclick="" >
+                <tr><td id = "ListedId" style="color:crimson">{{ forloop.counter }}: {{ course.text }} 
+                    <input id = "Completed" type ="checkbox" onclick="ChangeColor">
                     
                     </input>
                 </td></tr>
                 
             {% endfor %}
         </table>
+
+        <script>
+            function ChangeColor()
+            {
+                document.getElementsByName("course_text").style.color="green"
+            }
+        </script>
     </body>
 </html>

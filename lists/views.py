@@ -20,3 +20,5 @@ def add_course(request, list_id):
     list_ = List.objects.get(id=list_id)
     Courses.objects.create(text = request.POST['course_text'], list=list_)
     return redirect(f'/lists/{list_.id}/')
+
+
