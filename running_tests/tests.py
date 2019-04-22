@@ -46,9 +46,18 @@ class FIrstTestCase(LiveServerTestCase):
         #submitBox()
         #time.sleep(5)
         inputbox.send_keys(Keys.ENTER)
+        
         #CourseAttribute = inputbox.get_attribute()
         self.wait_for_row_table('1: History 101')
+        inputbox = self.browser.find_element_by_id('Course_Id')
 
+        inputbox.send_keys('Language 101')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_table('2: Language 101')
+
+        checkbox = self.browser.find_element_by_id('Completed')
+        checkbox.click()
+        # time.sleep(5)
 
 
     #2) He enters a course as a test and press es the enter key and saw the list updated. Adding his course to the list

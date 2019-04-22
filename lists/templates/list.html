@@ -1,6 +1,8 @@
 <html>
     <head>
-        <title>Course Management</title>
+
+        <title style="text-align: center">Course Management</title>
+
     </head>
     <style>
         body {
@@ -8,15 +10,20 @@
     }
     </style>
     <body>
-        <h1>Your Course List</h1>
+        <h1 style="text-align:center">Your Course List</h1>
         <form method = "POST" action="/lists/{{ list.id }}/add_course"> 
             <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
             <button type="button">Submit</button>
             {% csrf_token %}
         </form>
-        <table id="Course_Table">
+        <table id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
             {% for course in list.courses_set.all %}
-                <tr><td>{{ forloop.counter }}: {{ course.text }}</td></tr>
+                <tr><td style="color:crimson">{{ forloop.counter }}: {{ course.text }} 
+                    <input id = "Completed" type ="checkbox" style="color:darkgreen" >
+                    
+                    </input>
+                </td></tr>
+                
             {% endfor %}
         </table>
     </body>
