@@ -19,7 +19,7 @@
         <table id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
             {% for course in list.courses_set.all %}
                 <tr><td style="color:crimson">{{ forloop.counter }}: {{ course.text }} 
-                    <input id = "Completed" type ="checkbox" style="color:darkgreen" >
+                    <input id = "Completed" type ="checkbox" style="color:darkgreen" onclick="" >
                     
                     </input>
                 </td></tr>
