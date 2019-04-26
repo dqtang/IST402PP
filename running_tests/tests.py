@@ -2,11 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 import time
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 Max_WAIT = 10
 
-class FIrstTestCase(LiveServerTestCase):
+class FIrstTestCase(StaticLiveServerTestCase):
 
 
     def setUp(self):

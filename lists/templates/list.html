@@ -1,37 +1,23 @@
-<html>
-    <head>
+{% extends 'base.html' %}
 
-        <title style="text-align: center">Course Management</title>
+{% block header_text %}Course Management List{% endblock %}
 
-    </head>
-    <style>
-        body {
-        background-color: #6699ff
-    }
-    </style>
-    <body>
-        <h1 style="text-align:center">Your Course List</h1>
-        <form method = "POST" action="/lists/{{ list.id }}/add_course"> 
-            <input name = "course_text" id="Course_Id" placeholder="Enter a Course" />
-            <button type="button">Submit</button>
-            {% csrf_token %}
-        </form>
-        <table id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
-            {% for course in list.courses_set.all %}
-                <tr><td id = "ListedId" style="color:crimson">{{ forloop.counter }}: {{ course.text }} 
-                    <input id = "Completed" type ="checkbox" onclick="ChangeColor">
-                    
-                    </input>
-                </td></tr>
+{% block form_action %}/lists/{{ list.id }}/add_course{% endblock %}
+
+
+
+{% block table %}
+<div  class = "checkbox">
+        
+    <table class="Course_Table" id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
+        {% for course in list.courses_set.all %}
+            <tr><td class = "CourseList" id = "ListedId" style="color:crimson">
+                <label><input type="checkbox" class="strikethrough"><span>{{ forloop.counter }}: {{ course.text }}</span></label>
+
+            </td></tr>
                 
-            {% endfor %}
-        </table>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
 
-        <script>
-            function ChangeColor()
-            {
-                document.getElementsByName("course_text").style.color="green"
-            }
-        </script>
-    </body>
-</html>

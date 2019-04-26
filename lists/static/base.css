@@ -1,0 +1,4 @@
+.strikethrough:checked + span{
+    text-decoration: line-through;
+    color: green;
+}
