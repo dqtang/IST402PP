@@ -9,7 +9,7 @@
 {% block table %}
 <div  class = "checkbox">
         
-    <table class="Course_Table" id="Course_Table" align="center" bgcolor ="#A7A5A4"> 
+    <table class="Course_Table" id="Course_Table" bgcolor ="#A7A5A4"> 
         {% for course in list.courses_set.all %}
             <tr><td class = "CourseList" id = "ListedId" style="color:crimson">
                 <label><input type="checkbox" class="strikethrough"><span>{{ forloop.counter }}: {{ course.text }}</span></label>
